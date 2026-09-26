@@ -1,11 +1,12 @@
 @import "tailwindcss";
 :root {
-  --paper: #f2eee4;
-  --ink: #262924;
-  --muted: #686b60;
-  --rule: #c7c6b7;
-  --red: #8f382b;
-  --panel: #e6e5d8;
+  color-scheme: dark;
+  --paper: #000;
+  --ink: #d1d5df;
+  --muted: #969eaf;
+  --rule: #29303e;
+  --red: #8fb5f5;
+  --panel: #10131a;
 }
 * {
   box-sizing: border-box;
@@ -14,12 +15,12 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
   line-height: 1.6;
 }
 a {
-  color: inherit;
+  color: var(--red);
   text-decoration: none;
 }
 a:hover {
@@ -35,8 +36,8 @@ select {
 button,
 .button {
   cursor: pointer;
-  background: var(--ink);
-  color: var(--paper);
+  background: #254b83;
+  color: #edf2ff;
   padding: 9px 17px;
   display: inline-block;
 }
@@ -46,7 +47,7 @@ button:disabled {
 }
 input,
 select {
-  background: #f8f5ec;
+  background: #090c12;
   color: var(--ink);
   padding: 9px 12px;
   min-width: 0;
@@ -72,35 +73,37 @@ h3 {
 h1,
 h2,
 .wordmark {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 h1 {
-  font-size: clamp(32px, 4.5vw, 54px);
-  letter-spacing: -1.8px;
+  font-size: 24px;
+  letter-spacing: -0.5px;
 }
 h2 {
-  font-size: 26px;
+  font-size: 15px;
   letter-spacing: -0.6px;
 }
 h3 {
-  font-size: 17px;
+  font-size: 13px;
 }
 p {
   margin-bottom: 16px;
 }
 .site {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: auto;
-  padding: 0 36px;
+  padding: 0 20px;
 }
 .masthead {
   display: flex;
   align-items: center;
   gap: 25px;
-  padding: 30px 0 25px;
+  padding: 17px 0 18px;
 }
 .wordmark {
-  font-size: 42px;
+  font-size: 36px;
+  font-style: italic;
+  color: #e2e8f4;
   font-weight: bold;
   letter-spacing: -2px;
 }
@@ -111,7 +114,7 @@ p {
   font-size: 20px;
 }
 .masthead p {
-  font-family: Georgia, serif;
+  font-family: Arial, sans-serif;
   font-style: italic;
   color: var(--muted);
   margin: 8px 0 0;
@@ -125,10 +128,10 @@ p {
 .main-nav {
   display: flex;
   align-items: center;
-  gap: 28px;
-  border-top: 3px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding: 10px 0;
+  gap: 0;
+  border-top: 2px solid #527ebc;
+  border-bottom: 1px solid #354763;
+  padding: 5px 8px;
   font-weight: bold;
 }
 .main-nav form {
@@ -144,14 +147,14 @@ p {
 }
 main {
   min-height: 65vh;
-  padding: 36px 0 64px;
+  padding: 22px 0 36px;
 }
 .page-heading {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 25px;
-  margin-bottom: 36px;
+  margin-bottom: 20px;
 }
 .page-heading > p {
   color: var(--muted);
@@ -168,16 +171,18 @@ main {
 }
 .home-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 290px;
-  gap: 40px;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 18px;
 }
 .section-heading {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 14px;
-  border-bottom: 2px solid var(--ink);
-  padding-bottom: 12px;
+  border: 1px solid #354763;
+  border-top: 2px solid #527ebc;
+  background: #19263b;
+  padding: 7px 10px;
 }
 .section-heading span,
 .section-heading a {
@@ -189,12 +194,12 @@ main {
   align-items: center;
   gap: 20px;
   border-bottom: 1px solid var(--rule);
-  padding: 18px 0;
+  padding: 10px 12px;
 }
 .release-index {
-  font-family: Georgia, serif;
+  font-family: Arial, sans-serif;
   color: var(--muted);
-  font-size: 22px;
+  font-size: 12px;
 }
 .release strong {
   margin-left: auto;
@@ -209,11 +214,11 @@ main {
 .desk-note {
   background: var(--panel);
   border: 1px solid var(--rule);
-  padding: 25px;
+  padding: 15px;
   height: fit-content;
 }
 .desk-note h2 {
-  margin-bottom: 22px;
+  margin-bottom: 12px;
 }
 .desk-note p:not(.eyebrow) {
   font-size: 14px;
@@ -223,33 +228,34 @@ main {
   margin: 25px 0 14px;
 }
 .shelf {
-  margin-top: 45px;
+  margin-top: 14px;
 }
 .shelf-items {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 24px;
-  margin-top: 22px;
+  gap: 16px;
+  margin-top: 14px;
 }
 .cover {
   aspect-ratio: 2/3;
-  border: 1px solid var(--ink);
+  border: 1px solid #46546b;
   padding: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #d6d5c6;
+  background: linear-gradient(145deg, #263a55, #101925);
+  color: #b8cdea;
   position: relative;
   overflow: hidden;
 }
 .cover strong {
-  font-family: Georgia, serif;
-  font-size: clamp(21px, 2.4vw, 32px);
+  font-family: Arial, sans-serif;
+  font-size: clamp(17px, 2vw, 25px);
   line-height: 1.02;
   letter-spacing: -1px;
-  border-top: 4px double currentColor;
-  border-bottom: 1px solid currentColor;
-  padding: 14px 0;
+  border-left: 3px solid currentColor;
+  font-weight: 800;
+  padding: 8px 0 8px 8px;
   overflow-wrap: anywhere;
 }
 .cover-label,
@@ -258,19 +264,19 @@ main {
   letter-spacing: 1.4px;
 }
 .cover-1 {
-  background: #a74434;
-  color: #f4e8d7;
+  background: linear-gradient(145deg, #4a2636, #1b111b);
+  color: #e4b6c5;
 }
 .cover-2 {
-  background: #313e3b;
-  color: #e6e5d8;
+  background: linear-gradient(145deg, #234344, #101c22);
+  color: #abd2cf;
 }
 .cover-3 {
-  background: #c3b790;
-  color: #30382e;
+  background: linear-gradient(145deg, #443d29, #1d1b15);
+  color: #d5c79c;
 }
 .shelf-item h3 {
-  margin-top: 13px;
+  margin-top: 8px;
 }
 .shelf-item p {
   font-size: 11px;
@@ -288,7 +294,7 @@ main {
   display: flex;
   align-items: end;
   gap: 15px;
-  border-top: 2px solid var(--ink);
+  border-top: 2px solid #354763;
   border-bottom: 1px solid var(--rule);
   padding: 20px 0;
   margin-bottom: 20px;
@@ -305,14 +311,14 @@ main {
 .catalog-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 36px;
+  gap: 0 20px;
 }
 .catalog-item {
   display: grid;
-  grid-template-columns: 105px 1fr;
-  gap: 23px;
+  grid-template-columns: 95px minmax(0, 1fr);
+  gap: 14px;
   border-bottom: 1px solid var(--rule);
-  padding: 24px 0;
+  padding: 17px 0;
 }
 .catalog-item .cover strong {
   font-size: 21px;
@@ -321,7 +327,7 @@ main {
   margin-bottom: 8px;
 }
 .catalog-item h2 {
-  font-size: 25px;
+  font-size: 17px;
 }
 .byline {
   margin: 8px 0 14px;
@@ -337,7 +343,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;
   margin: 30px 0;
 }
 .empty {
@@ -355,25 +361,25 @@ main {
 }
 .manga-intro {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 40px;
+  grid-template-columns: 175px minmax(0, 1fr);
+  gap: 18px;
   max-width: 900px;
 }
 .manga-intro h1 {
   margin: 8px 0;
 }
 .alternate {
-  font-size: 18px;
+  font-size: 14px;
   color: var(--muted);
 }
 .synopsis {
-  font-size: 17px;
+  font-size: 13px;
   max-width: 650px;
 }
 .tabs {
   display: flex;
   gap: 30px;
-  border-bottom: 1px solid var(--ink);
+  border-bottom: 1px solid #354763;
   margin: 35px 0 25px;
 }
 .tabs a {
@@ -385,9 +391,9 @@ main {
 }
 .chapter-row {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   align-items: center;
-  padding: 18px 0;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--rule);
 }
 .chapter-row span {
@@ -412,12 +418,12 @@ footer {
   flex-wrap: wrap;
   gap: 16px 30px;
   align-items: center;
-  border-top: 3px solid var(--ink);
-  padding: 25px 0 35px;
+  border-top: 2px solid #527ebc;
+  padding: 15px 0 35px;
   font-size: 12px;
 }
 .footer-brand {
-  font-family: Georgia, serif;
+  font-family: Arial, sans-serif;
   font-weight: bold;
   font-size: 20px;
 }
@@ -545,5 +551,160 @@ footer small {
   .catalog-item {
     grid-template-columns: 85px 1fr;
     gap: 16px;
+  }
+}
+
+/* Compact community portal surfaces. */
+.main-nav {
+  background: #203f6b;
+  border: 1px solid #3b5c8d;
+}
+.main-nav > a {
+  color: #edf2ff;
+  padding: 5px 16px;
+  border-right: 1px solid #49638a;
+}
+.main-nav > a:hover {
+  background: #315789;
+  text-decoration: none;
+}
+.main-nav input,
+.main-nav button {
+  font-size: 11px;
+}
+.masthead p {
+  font-size: 11px;
+  font-style: normal;
+}
+.edition {
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.page-heading {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 15px;
+}
+.release-list {
+  border: 1px solid var(--rule);
+  border-top: 0;
+}
+.release {
+  background: #0e1117;
+  gap: 13px;
+}
+.release:nth-child(even),
+.chapter-row:nth-child(even) {
+  background: #141820;
+}
+.release:last-child {
+  border-bottom: 0;
+}
+.release:hover {
+  background: #1a2535;
+  text-decoration: none;
+}
+.release > div {
+  min-width: 0;
+}
+.release h3 {
+  overflow-wrap: anywhere;
+}
+.release strong {
+  border: 1px solid #344a6b;
+  background: #19273c;
+  padding: 2px 7px;
+  font-size: 11px;
+}
+.desk-note {
+  border-top: 2px solid #527ebc;
+}
+.desk-note p:not(.eyebrow) {
+  font-size: 12px;
+}
+.shelf-items {
+  margin-top: 0;
+  padding: 14px;
+  border: 1px solid var(--rule);
+  border-top: 0;
+  background: #0b0e13;
+  gap: 16px;
+}
+.shelf-item {
+  min-width: 0;
+}
+.cover::after {
+  content: "";
+  position: absolute;
+  width: 160%;
+  height: 28%;
+  background: #ffffff06;
+  border-block: 1px solid #ffffff0d;
+  transform: rotate(-35deg);
+  top: 35%;
+  left: -30%;
+  pointer-events: none;
+}
+.cover strong {
+  z-index: 1;
+}
+.filters {
+  background: var(--panel);
+  padding: 14px;
+  border: 1px solid var(--rule);
+}
+.tabs {
+  gap: 3px;
+}
+.tabs a {
+  padding: 7px 16px;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-bottom: 0;
+}
+.tabs [aria-current] {
+  background: #203f6b;
+  color: #edf2ff;
+}
+input::placeholder {
+  color: #8e98aa;
+}
+button:hover,
+.button:hover {
+  background: #315d99;
+  color: #fff;
+}
+@media (max-width: 800px) {
+  .main-nav {
+    gap: 6px;
+  }
+  .main-nav input {
+    width: 0;
+  }
+  .page-heading {
+    gap: 8px;
+  }
+}
+@media (max-width: 450px) {
+  .site {
+    padding: 0 14px;
+  }
+  .wordmark {
+    font-size: 32px;
+  }
+  .shelf-items {
+    gap: 10px;
+    padding: 10px;
+  }
+  .cover strong {
+    font-size: 17px;
+    padding-left: 5px;
+  }
+  .cover-label,
+  .cover-bottom {
+    font-size: 7px;
+    letter-spacing: 0.4px;
+  }
+  .catalog-item {
+    grid-template-columns: 85px minmax(0, 1fr);
   }
 }

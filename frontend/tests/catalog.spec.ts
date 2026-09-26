@@ -2,13 +2,13 @@ import { expect, test } from "@playwright/test";
 test("browse a series and its chapter ledger", async ({ page }, testInfo) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "Between chapters." }),
+    page.getByRole("heading", { name: "Welcome to MangaForum" }),
   ).toBeVisible();
   await page.screenshot({
     path: `../docs/screenshots/home-${testInfo.project.name}.png`,
     fullPage: true,
   });
-  await page.getByRole("link", { name: "Manga index", exact: true }).click();
+  await page.getByRole("link", { name: "Manga database", exact: true }).click();
   await page.getByLabel("Find a title").fill("Chainsaw");
   await page.getByRole("button", { name: "Browse", exact: true }).click();
   await expect(page.getByText("1 titles found")).toBeVisible();

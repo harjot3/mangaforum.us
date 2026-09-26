@@ -4,7 +4,7 @@ import { Providers } from "@/components/providers";
 import "./globals.css";
 export const metadata: Metadata = {
   title: {
-    default: "MangaForum.us | The reading room",
+    default: "MangaForum.us | Manga & chapter updates",
     template: "%s | MangaForum.us",
   },
   description:
@@ -26,16 +26,16 @@ export default function Layout({
                 Manga<span>Forum</span>
                 <small>.us</small>
               </Link>
-              <p>A place between chapters.</p>
+              <p>Manga. Chapters. Late nights.</p>
               <span className="edition">
-                THE READING ROOM
+                MANGA FANS, WELCOME
                 <br />
                 EST. 2026
               </span>
             </div>
             <nav className="main-nav" aria-label="Main navigation">
-              <Link href="/">Reading room</Link>
-              <Link href="/discover">Manga index</Link>
+              <Link href="/">Home</Link>
+              <Link href="/discover">Manga database</Link>
               <form action="/discover" role="search">
                 <label className="sr-only" htmlFor="nav-search">
                   Search manga

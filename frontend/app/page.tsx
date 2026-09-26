@@ -11,19 +11,19 @@ export default async function Home() {
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">The reading room / 01</p>
-          <h1>Between chapters.</h1>
+          <p className="eyebrow">Your manga corner of the internet</p>
+          <h1>Welcome to MangaForum</h1>
         </div>
         <p>
-          Browse a familiar shelf.
+          Find a series. Catch up on chapters.
           <br />
-          Find something worth staying up for.
+          Stay for the next obsession.
         </p>
       </div>
       <div className="home-columns">
         <section>
           <div className="section-heading">
-            <h2>On the release ledger</h2>
+            <h2>Latest chapter updates</h2>
             <span>Latest recorded chapters</span>
           </div>
           {releases.length ? (
@@ -49,7 +49,7 @@ export default async function Home() {
             </div>
           ) : (
             <div className="empty">
-              <h3>The ledger is open.</h3>
+              <h3>No chapter updates yet.</h3>
               <p>
                 New chapters will appear here when release information is added.
               </p>
@@ -57,19 +57,15 @@ export default async function Home() {
           )}
         </section>
         <aside className="desk-note">
-          <p className="eyebrow">From the desk</p>
-          <h2>
-            Leave a little room
-            <br />
-            for the next chapter.
-          </h2>
+          <p className="eyebrow">Community notice</p>
+          <h2>A home for manga fans.</h2>
           <p>
-            A manga’s title is an invitation. Its ending shouldn’t be the first
-            thing you learn about it.
+            Discover manga, check chapter updates, and find links to official
+            editions.
           </p>
           <p>
-            This reading room starts with the catalog. Chapter conversations and
-            personal reading shelves are still being built.
+            The catalog is open. Chapter discussions and personal reading lists
+            are coming next.
           </p>
           <div className="note-rule" />
           <span className="metadata">A small community, in the making.</span>
@@ -77,8 +73,8 @@ export default async function Home() {
       </div>
       <section className="shelf">
         <div className="section-heading">
-          <h2>The manga shelf</h2>
-          <Link href="/discover">Browse the index →</Link>
+          <h2>Explore manga</h2>
+          <Link href="/discover">View all manga →</Link>
         </div>
         {catalog.items.length ? (
           <div className="shelf-items">
