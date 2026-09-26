@@ -1,6 +1,8 @@
+import { publisherUrl } from "@/lib/publisher-url";
+import { api } from "@/lib/catalog-server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { api, ApiError, Manga, Chapter, Results, date } from "@/lib/api";
+import { ApiError, Manga, Chapter, Results, date } from "@/lib/api";
 import { Cover } from "@/components/cover";
 export const dynamic = "force-dynamic";
 export default async function MangaPage({
@@ -34,10 +36,10 @@ export default async function MangaPage({
           <p className="alternate">{manga.alternateTitle}</p>
           <p className="byline">By {manga.author}</p>
           <p className="synopsis">{manga.description}</p>
-          {manga.officialUrl && (
+          {publisherUrl(manga.officialUrl) && (
             <a
               className="button"
-              href={manga.officialUrl}
+              href={publisherUrl(manga.officialUrl)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -65,9 +67,9 @@ export default async function MangaPage({
               <div className="chapter-row" key={c.id}>
                 <strong>Chapter {c.number}</strong>
                 <span>{date(c.releasedAt)}</span>
-                {c.officialUrl && (
+                {publisherUrl(c.officialUrl) && (
                   <a
-                    href={c.officialUrl}
+                    href={publisherUrl(c.officialUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Providers } from "@/components/providers";
 import "./globals.css";
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: {
     default: "MangaForum.us | Manga & chapter updates",

@@ -50,6 +50,70 @@ test("empty searches and missing titles are recoverable", async ({ page }) => {
   ).toBeVisible();
   await page.goto("/manga/no-such-title");
   await expect(
-    page.getByRole("heading", { name: "Page not found" }),
+    page.getByRole("heading", { name: process.env.EXPECT_CATALOG_SOURCE === "fallback" ? "Catalog unavailable" : "Page not found" }),
   ).toBeVisible();
+});
+
+test("homepage icons and security policy work without injected scripts", async ({
+  page,
+  request,
+}) => {
+  await page.route("**/", async (route) => {
+    const response = await route.fetch();
+    const html = await response.text();
+    await route.fulfill({ response, body: html.replace("</head>", "<script>window.__injected = true</script></head>") });
+  });
+  const response = await page.goto("/");
+  const csp = response!.headers()["content-security-policy"];
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).toContain("object-src 'none'");
+  expect(csp).toMatch(/script-src[^;]*'nonce-[^']+'/);
+  expect(csp.split("script-src")[1].split(";")[0]).not.toContain(
+    "'unsafe-inline'",
+  );
+  expect(response!.headers()["x-content-type-options"]).toBe("nosniff");
+  expect(response!.headers()["x-powered-by"]).toBeUndefined();
+  await expect(page.locator(".character-icon")).toHaveCount(3);
+  for (const icon of await page.locator(".character-icon img").all()) {
+    await icon.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        icon.evaluate((img) => (img as HTMLImageElement).naturalWidth),
+      )
+      .toBeGreaterThan(0);
+  }
+  expect(await page.evaluate(() => "__injected" in window)).toBe(false);
+  await page.getByRole("link", { name: "Coco — view series" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Witch Hat Atelier", exact: true }),
+  ).toBeVisible();
+
+  const catalog = await request.get("/api/manga");
+  expect(catalog.status()).toBe(200);
+  expect(["bundled", "backend", "fallback"]).toContain(
+    catalog.headers()["x-catalog-source"],
+  );
+  if (process.env.EXPECT_CATALOG_SOURCE)
+    expect(catalog.headers()["x-catalog-source"]).toBe(
+      process.env.EXPECT_CATALOG_SOURCE,
+    );
+  expect((await catalog.json()).totalItems).toBe(8);
+  for (const path of [
+    "/api/manga?page=-1",
+    "/api/manga?status=bad",
+    "/api/manga?q=" + "a".repeat(101),
+    "/api/manga?q=a&q=b",
+  ]) {
+    expect((await request.get(path)).status()).toBe(400);
+  }
+  expect((await request.get("/api/users")).status()).toBe(404);
+  expect(
+    (
+      await request.post("/api/manga", { data: { title: "unwanted" } })
+    ).status(),
+  ).toBe(405);
+  const injection = await request.get("/api/manga", {
+    params: { q: "' OR 1=1 --" },
+  });
+  expect((await injection.json()).totalItems).toBe(0);
 });

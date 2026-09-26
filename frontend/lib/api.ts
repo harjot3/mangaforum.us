@@ -33,11 +33,7 @@ export class ApiError extends Error {
   }
 }
 export async function api<T>(path: string): Promise<T> {
-  const base =
-    typeof window === "undefined"
-      ? `${process.env.BACKEND_URL ?? "http://localhost:8080"}/api`
-      : "/api";
-  const response = await fetch(`${base}${path}`, {
+  const response = await fetch(`/api${path}`, {
     cache: "no-store",
     signal: AbortSignal.timeout(10000),
   });

@@ -1,5 +1,7 @@
+import { CharacterIcon } from "@/components/character-icon";
+import { api } from "@/lib/catalog-server";
 import Link from "next/link";
-import { api, Manga, Results } from "@/lib/api";
+import { Manga, Results } from "@/lib/api";
 import { Cover } from "@/components/cover";
 export const dynamic = "force-dynamic";
 export default async function Home() {
@@ -8,7 +10,10 @@ export default async function Home() {
     <>
       <div className="page-heading">
         <h1>Manga database</h1>
-        <p>{catalog.totalItems} series</p>
+        <div className="heading-tools">
+          <span className="metadata">{catalog.totalItems} series</span>
+          <CharacterIcon character="yatora" />
+        </div>
       </div>
       <div className="home-columns">
         <section>
@@ -43,6 +48,7 @@ export default async function Home() {
           <section>
             <div className="section-heading">
               <h2>Genres</h2>
+              <CharacterIcon character="coco" />
             </div>
             <nav className="genre-links" aria-label="Browse genres">
               {[
@@ -68,6 +74,7 @@ export default async function Home() {
           <section>
             <div className="section-heading">
               <h2>Official publishers</h2>
+              <CharacterIcon character="naruto" />
             </div>
             <div className="publisher-links">
               <a

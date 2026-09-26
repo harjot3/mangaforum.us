@@ -1,6 +1,8 @@
+import { publisherUrl } from "@/lib/publisher-url";
+import { api } from "@/lib/catalog-server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { api, ApiError, Manga, Chapter, Results, date } from "@/lib/api";
+import { ApiError, Manga, Chapter, Results, date } from "@/lib/api";
 export const dynamic = "force-dynamic";
 export default async function Chapters({
   params,
@@ -56,8 +58,12 @@ export default async function Chapters({
           <div className="chapter-row" key={c.id}>
             <strong>Chapter {c.number}</strong>
             <span>{date(c.releasedAt)}</span>
-            {c.officialUrl ? (
-              <a href={c.officialUrl} target="_blank" rel="noopener noreferrer">
+            {publisherUrl(c.officialUrl) ? (
+              <a
+                href={publisherUrl(c.officialUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Official series ↗
               </a>
             ) : (

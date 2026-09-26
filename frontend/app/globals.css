@@ -763,3 +763,33 @@ button:hover,
     width: 140px;
   }
 }
+
+.heading-tools {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.character-icon {
+  display: inline-flex;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border: 1px solid #527ebc;
+  border-radius: 50%;
+  background: #10131a;
+  vertical-align: middle;
+}
+.character-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+}
+.character-naruto img {
+  object-position: center 42%;
+  transform: scale(1.6);
+}
+.catalog-sidebar .section-heading {
+  align-items: center;
+}
