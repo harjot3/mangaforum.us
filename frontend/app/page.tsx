@@ -1,101 +1,56 @@
 import Link from "next/link";
-import { api, date, Manga, Release, Results } from "@/lib/api";
+import { api, Manga, Results } from "@/lib/api";
 import { Cover } from "@/components/cover";
 export const dynamic = "force-dynamic";
 export default async function Home() {
-  const [catalog, releases] = await Promise.all([
-    api<Results<Manga>>("/manga"),
-    api<Release[]>("/chapters/recent"),
-  ]);
+  const catalog = await api<Results<Manga>>("/manga");
   return (
     <>
       <div className="page-heading">
-        <div>
-          <p className="eyebrow">Your manga corner of the internet</p>
-          <h1>Welcome to MangaForum</h1>
-        </div>
-        <p>
-          Find a series. Catch up on chapters.
-          <br />
-          Stay for the next obsession.
-        </p>
+        <h1>Manga database</h1>
+        <p>{catalog.totalItems} series</p>
       </div>
       <div className="home-columns">
         <section>
           <div className="section-heading">
-            <h2>Latest chapter updates</h2>
-            <span>Latest recorded chapters</span>
+            <h2>Browse manga</h2>
+            <Link href="/discover">View all →</Link>
           </div>
-          {releases.length ? (
-            <div className="release-list">
-              {releases.map((r, i) => (
-                <Link
-                  className="release"
-                  key={r.id}
-                  href={`/manga/${r.mangaSlug}/chapters`}
-                >
-                  <span className="release-index">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h3>{r.mangaTitle}</h3>
-                    <span className="metadata">
-                      Recorded {date(r.releasedAt)}
-                    </span>
-                  </div>
-                  <strong>CH. {r.number}</strong>
+          <div className="home-catalog">
+            {catalog.items.map((manga) => (
+              <article className="catalog-item" key={manga.id}>
+                <Link href={`/manga/${manga.slug}`} tabIndex={-1} aria-hidden="true">
+                  <Cover manga={manga} small />
                 </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="empty">
-              <h3>No chapter updates yet.</h3>
-              <p>
-                New chapters will appear here when release information is added.
-              </p>
-            </div>
-          )}
-        </section>
-        <aside className="desk-note">
-          <p className="eyebrow">Community notice</p>
-          <h2>A home for manga fans.</h2>
-          <p>
-            Discover manga, check chapter updates, and find links to official
-            editions.
-          </p>
-          <p>
-            The catalog is open. Chapter discussions and personal reading lists
-            are coming next.
-          </p>
-          <div className="note-rule" />
-          <span className="metadata">A small community, in the making.</span>
-        </aside>
-      </div>
-      <section className="shelf">
-        <div className="section-heading">
-          <h2>Explore manga</h2>
-          <Link href="/discover">View all manga →</Link>
-        </div>
-        {catalog.items.length ? (
-          <div className="shelf-items">
-            {catalog.items.slice(0, 6).map((m) => (
-              <Link className="shelf-item" key={m.id} href={`/manga/${m.slug}`}>
-                <Cover manga={m} />
-                <h3>{m.title}</h3>
-                <p>{m.author}</p>
-              </Link>
+                <div>
+                  <h2><Link href={`/manga/${manga.slug}`}>{manga.title}</Link></h2>
+                  <p className="byline">{manga.author}</p>
+                  <p className="description">{manga.description}</p>
+                  <span className="metadata">{manga.genres}</span>
+                </div>
+              </article>
             ))}
           </div>
-        ) : (
-          <p className="empty">The catalog has no titles yet.</p>
-        )}
-      </section>
-      {process.env.CATALOG_DEMO === "true" && (
-        <p className="fixture-note">
-          LOCAL EDITION · Sample catalog. Chapter dates are development
-          fixtures, not a live release schedule.
-        </p>
-      )}
+          {!catalog.items.length && <p className="empty">No manga found.</p>}
+        </section>
+        <aside className="catalog-sidebar">
+          <section>
+            <div className="section-heading"><h2>Genres</h2></div>
+            <nav className="genre-links" aria-label="Browse genres">
+              {["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Mystery", "Slice of Life", "Supernatural"].map((genre) => (
+                <Link key={genre} href={`/discover?genre=${encodeURIComponent(genre)}`}>{genre}</Link>
+              ))}
+            </nav>
+          </section>
+          <section>
+            <div className="section-heading"><h2>Official publishers</h2></div>
+            <div className="publisher-links">
+              <a href="https://www.viz.com/manga-books" target="_blank" rel="noopener noreferrer">VIZ Media ↗</a>
+              <a href="https://kodansha.us/" target="_blank" rel="noopener noreferrer">Kodansha ↗</a>
+            </div>
+          </section>
+        </aside>
+      </div>
     </>
   );
 }

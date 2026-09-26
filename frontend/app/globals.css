@@ -708,3 +708,16 @@ button:hover,
     grid-template-columns: 85px minmax(0, 1fr);
   }
 }
+
+.manga-cover { aspect-ratio: 2 / 3; background: #10131a; border: 1px solid var(--rule); overflow: hidden; }
+.manga-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.home-catalog { border: 1px solid var(--rule); border-top: 0; }
+.home-catalog .catalog-item { padding: 14px; background: #0e1117; }
+.home-catalog .catalog-item:nth-child(even) { background: #141820; }
+.home-catalog .catalog-item:last-child { border-bottom: 0; }
+.catalog-sidebar section { margin-bottom: 18px; }
+.genre-links, .publisher-links { display: flex; flex-direction: column; border: 1px solid var(--rule); border-top: 0; background: var(--panel); }
+.genre-links a, .publisher-links a { padding: 7px 12px; border-bottom: 1px solid var(--rule); }
+.genre-links a:last-child, .publisher-links a:last-child { border-bottom: 0; }
+.manga-intro .manga-cover { align-self: start; }
+@media (max-width: 450px) { .manga-intro .manga-cover { width: 140px; } }

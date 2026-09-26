@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s | MangaForum.us",
   },
   description:
-    "A place for manga, chapter by chapter. Browse series, find official editions, and keep the next chapter in sight.",
+    "Manga titles, authors, synopses, and official publisher links.",
 };
 export default function Layout({
   children,
@@ -26,12 +26,6 @@ export default function Layout({
                 Manga<span>Forum</span>
                 <small>.us</small>
               </Link>
-              <p>Manga. Chapters. Late nights.</p>
-              <span className="edition">
-                MANGA FANS, WELCOME
-                <br />
-                EST. 2026
-              </span>
             </div>
             <nav className="main-nav" aria-label="Main navigation">
               <Link href="/">Home</Link>
@@ -43,7 +37,7 @@ export default function Layout({
                 <input
                   id="nav-search"
                   name="q"
-                  placeholder="Find your next read"
+                  placeholder="Search manga"
                   maxLength={100}
                 />
                 <button>Search</button>
@@ -57,12 +51,11 @@ export default function Layout({
             <Link className="footer-brand" href="/">
               MangaForum.us
             </Link>
-            <p>For the readers who stay after the last page.</p>
             <nav aria-label="Legal">
               <Link href="/terms">Terms of Service</Link>
               <Link href="/privacy">Privacy Policy</Link>
             </nav>
-            <small>Metadata and discussion. No manga scans.</small>
+            <small>Series information from official publishers. Cover artwork belongs to its respective owners.</small>
           </footer>
         </div>
       </body>

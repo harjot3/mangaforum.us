@@ -32,7 +32,7 @@ export default async function Chapters({
       </p>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">The chapter ledger</p>
+          <p className="eyebrow">Chapters</p>
           <h1>{manga.title}</h1>
         </div>
         <p>

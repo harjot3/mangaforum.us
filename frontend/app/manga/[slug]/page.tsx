@@ -54,7 +54,7 @@ export default async function MangaPage({
           Chapters ({chapters.totalItems})
         </Link>
       </nav>
-      <div className="home-columns">
+      <div className="series-chapters">
         <section>
           <div className="section-heading">
             <h2>Latest recorded chapters</h2>
@@ -77,17 +77,10 @@ export default async function MangaPage({
               </div>
             ))
           ) : (
-            <p className="empty">No releases recorded yet.</p>
+            <p className="empty">Chapter data has not been added for this series. See the official publisher for available chapters.</p>
           )}
         </section>
-        <aside className="desk-note">
-          <p className="eyebrow">The reader’s shelf</p>
-          <h2>One chapter at a time.</h2>
-          <p>
-            Personal reading progress and following arrive with accounts. For
-            now, explore the chapter ledger and official editions.
-          </p>
-        </aside>
+
       </div>
     </>
   );

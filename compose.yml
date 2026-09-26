@@ -17,7 +17,6 @@ services:
     environment:
       DATABASE_URL: jdbc:postgresql://postgres:5432/mangaforum
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-local-development-only}
-      SPRING_PROFILES_ACTIVE: demo
     ports: ["127.0.0.1:8080:8080"]
     depends_on:
       postgres:
@@ -26,7 +25,6 @@ services:
     build: ./frontend
     environment:
       BACKEND_URL: http://backend:8080
-      CATALOG_DEMO: 'true'
     ports: ["127.0.0.1:3000:3000"]
     depends_on: [backend]
   redis:

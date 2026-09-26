@@ -6,14 +6,8 @@ export default function Discover() {
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">The catalog / A–Z</p>
-          <h1>Manga index.</h1>
+          <h1>Manga database</h1>
         </div>
-        <p>
-          Follow a title, an author, a curiosity.
-          <br />
-          There’s always another shelf.
-        </p>
       </div>
       <Suspense fallback={<CatalogSkeleton />}>
         <Catalog />

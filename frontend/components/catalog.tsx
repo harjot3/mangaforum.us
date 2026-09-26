@@ -45,13 +45,14 @@ export function Catalog() {
         <label>
           Genre
           <select name="genre" defaultValue={genre}>
-            <option value="">Every shelf</option>
+            <option value="">All genres</option>
             <option>Action</option>
             <option>Adventure</option>
             <option>Comedy</option>
             <option>Drama</option>
             <option>Fantasy</option>
             <option>Horror</option>
+            <option>Mystery</option>
             <option>Slice of Life</option>
             <option>Supernatural</option>
           </select>
@@ -71,7 +72,7 @@ export function Catalog() {
           <p className="metadata">{data.totalItems} titles found</p>
           {data.items.length === 0 ? (
             <div className="empty">
-              <h2>No titles on this shelf.</h2>
+              <h2>No manga found.</h2>
               <p>Try a different title or remove a filter.</p>
               <Link href="/discover">Browse all manga</Link>
             </div>
