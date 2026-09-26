@@ -77,10 +77,12 @@ export default async function MangaPage({
               </div>
             ))
           ) : (
-            <p className="empty">Chapter data has not been added for this series. See the official publisher for available chapters.</p>
+            <p className="empty">
+              Chapter data has not been added for this series. See the official
+              publisher for available chapters.
+            </p>
           )}
         </section>
-
       </div>
     </>
   );

@@ -7,8 +7,7 @@ export const metadata: Metadata = {
     default: "MangaForum.us | Manga & chapter updates",
     template: "%s | MangaForum.us",
   },
-  description:
-    "Manga titles, authors, synopses, and official publisher links.",
+  description: "Manga titles, authors, synopses, and official publisher links.",
 };
 export default function Layout({
   children,
@@ -55,7 +54,10 @@ export default function Layout({
               <Link href="/terms">Terms of Service</Link>
               <Link href="/privacy">Privacy Policy</Link>
             </nav>
-            <small>Series information from official publishers. Cover artwork belongs to its respective owners.</small>
+            <small>
+              Series information from official publishers. Cover artwork belongs
+              to its respective owners.
+            </small>
           </footer>
         </div>
       </body>

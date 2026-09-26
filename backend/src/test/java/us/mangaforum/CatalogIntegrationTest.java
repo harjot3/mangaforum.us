@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("demo")
+
 @Testcontainers
 class CatalogIntegrationTest {
     @Container static PostgreSQLContainer<?> database = new PostgreSQLContainer<>("postgres:17-alpine");
@@ -31,11 +31,17 @@ class CatalogIntegrationTest {
             .andExpect(status().isOk()).andExpect(jsonPath("$.totalItems").value(1))
             .andExpect(jsonPath("$.items[0].slug").value("fullmetal-alchemist"));
     }
-    @Test void returnsMangaAndDescendingChapters() throws Exception {
+    @Test void returnsRealMangaWithoutSyntheticChapters() throws Exception {
         mvc.perform(get("/api/manga/chainsaw-man")).andExpect(status().isOk())
             .andExpect(jsonPath("$.author").value("Tatsuki Fujimoto"));
         mvc.perform(get("/api/manga/chainsaw-man/chapters")).andExpect(status().isOk())
-            .andExpect(jsonPath("$.totalItems").value(12)).andExpect(jsonPath("$.items[0].number").value(12));
+            .andExpect(jsonPath("$.totalItems").value(0));
+    }
+    @Test void seedsPublishedCatalogWithoutFakeReleases() throws Exception {
+        mvc.perform(get("/api/manga")).andExpect(status().isOk())
+            .andExpect(jsonPath("$.totalItems").value(8));
+        mvc.perform(get("/api/chapters/recent")).andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(0));
     }
     @Test void rejectsInvalidPagesAndMissingTitles() throws Exception {
         mvc.perform(get("/api/manga").param("page", "-1")).andExpect(status().isBadRequest());

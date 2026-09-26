@@ -8,16 +8,28 @@ export function Cover({
   small?: boolean;
 }) {
   const covers: Record<string, string> = {
-    "chainsaw-man": "jpg", dandadan: "jpg", "one-piece": "jpg",
-    "fullmetal-alchemist": "jpg", "death-note": "jpg", naruto: "jpg",
-    "blue-period": "webp", "witch-hat-atelier": "webp",
+    "chainsaw-man": "jpg",
+    dandadan: "jpg",
+    "one-piece": "jpg",
+    "fullmetal-alchemist": "jpg",
+    "death-note": "jpg",
+    naruto: "jpg",
+    "blue-period": "webp",
+    "witch-hat-atelier": "webp",
   };
   if (covers[manga.slug]) {
-    return <div className="manga-cover"><Image
-      src={`/covers/${manga.slug}.${covers[manga.slug]}`}
-      alt={`${manga.title} cover`} width={200} height={300}
-      sizes={small ? "95px" : "(max-width: 450px) 140px, 175px"}
-    /></div>;
+    return (
+      <div className="manga-cover">
+        <Image
+          src={`/covers/${manga.slug}.${covers[manga.slug]}`}
+          alt={`${manga.title} cover`}
+          unoptimized
+          width={200}
+          height={300}
+          sizes={small ? "95px" : "(max-width: 450px) 140px, 175px"}
+        />
+      </div>
+    );
   }
   return (
     <div
