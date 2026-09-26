@@ -69,7 +69,18 @@ npm run build
 npm run typecheck
 ```
 
-GitHub Actions runs the backend integration tests and frontend build. Browser end-to-end flows and screenshots are still pending local runtime verification.
+GitHub Actions runs the backend integration tests and frontend build. Playwright tests cover discovery, manga pages, chapter lists, empty searches and missing titles at desktop and mobile sizes. With the demo backend and frontend running:
+
+```sh
+cd frontend
+npx playwright install chromium
+npm run test:e2e
+```
+
+Verified locally against PostgreSQL 15: Flyway migrations and JPA validation, catalog filtering, and all four browser tests. The production Webpack build and TypeScript checks pass. Default Turbopack compilation is blocked by this workspace's local-port restrictions; use `npm run build -- --webpack` here. Docker Compose and Testcontainers still require verification on a machine with Docker.
+
+![Desktop reading room](docs/screenshots/home-desktop.png)
+![Mobile reading room](docs/screenshots/home-mobile.png)
 
 ## Next milestones
 
