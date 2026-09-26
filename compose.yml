@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: mangaforum
+      POSTGRES_USER: mangaforum
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-local-development-only}
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mangaforum"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/mangaforum
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-local-development-only}
+      SPRING_PROFILES_ACTIVE: demo
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  frontend:
+    build: ./frontend
+    environment:
+      BACKEND_URL: http://backend:8080
+      CATALOG_DEMO: 'true'
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on: [backend]
+  redis:
+    image: redis:7-alpine
+    profiles: [async]
+    ports: ["127.0.0.1:6379:6379"]
+volumes:
+  postgres-data:

@@ -1,2 +1,34 @@
-export const metadata = { title: 'Privacy Policy' };
-export default function Privacy() { return <article className="legal"><p className="eyebrow">Last updated September 25, 2026</p><h1>Privacy Policy</h1><h2>The current catalog</h2><p>The current version offers public catalog browsing. It does not yet accept account registration or save personal reading progress. Search terms are sent to our backend to retrieve matching titles.</p><h2>Technical information</h2><p>The hosting environment may process IP addresses, request paths and technical error information to operate and secure the service. Do not put sensitive information in searches. This application does not include advertising trackers or third-party analytics.</p><h2>Cookies and external links</h2><p>Essential session cookies may be used for security. We do not use advertising cookies. Following an official publisher link takes you to a separate service governed by its own privacy policy.</p><h2>Future account features</h2><p>Before accounts launch, this policy will describe account data, retention, deletion and a working privacy contact. No personal reading data is collected by this catalog version.</p></article>; }
+export const metadata = { title: "Privacy Policy" };
+export default function Privacy() {
+  return (
+    <article className="legal">
+      <p className="eyebrow">Last updated September 25, 2026</p>
+      <h1>Privacy Policy</h1>
+      <h2>The current catalog</h2>
+      <p>
+        The current version offers public catalog browsing. It does not yet
+        accept account registration or save personal reading progress. Search
+        terms are sent to our backend to retrieve matching titles.
+      </p>
+      <h2>Technical information</h2>
+      <p>
+        The hosting environment may process IP addresses, request paths and
+        technical error information to operate and secure the service. Do not
+        put sensitive information in searches. This application does not include
+        advertising trackers or third-party analytics.
+      </p>
+      <h2>Cookies and external links</h2>
+      <p>
+        Essential session cookies may be used for security. We do not use
+        advertising cookies. Following an official publisher link takes you to a
+        separate service governed by its own privacy policy.
+      </p>
+      <h2>Future account features</h2>
+      <p>
+        Before accounts launch, this policy will describe account data,
+        retention, deletion and a working privacy contact. No personal reading
+        data is collected by this catalog version.
+      </p>
+    </article>
+  );
+}

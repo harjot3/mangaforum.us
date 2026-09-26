@@ -1,2 +1,35 @@
-export const metadata = { title: 'Terms of Service' };
-export default function Terms() { return <article className="legal"><p className="eyebrow">Last updated September 25, 2026</p><h1>Terms of Service</h1><h2>Using MangaForum</h2><p>MangaForum provides manga metadata, release information and, as features become available, community discussion and reading tracking. Release records may be incomplete or inaccurate. Confirm availability with the official publisher.</p><h2>Respect the work and the readers</h2><p>Do not upload copyrighted scans, link to unauthorized copies, harass other readers, or misuse the service. Mark spoilers accurately when discussion becomes available. We may remove content or restrict access for abuse.</p><h2>Your contributions</h2><p>You retain ownership of your original contributions. Posting grants MangaForum permission to display and moderate them as part of the service. Only submit material you have the right to share.</p><h2>Availability and changes</h2><p>This is an early development service offered as available. Features and these terms may change. Material changes will be announced on the site. External publisher sites have their own terms.</p></article>; }
+export const metadata = { title: "Terms of Service" };
+export default function Terms() {
+  return (
+    <article className="legal">
+      <p className="eyebrow">Last updated September 25, 2026</p>
+      <h1>Terms of Service</h1>
+      <h2>Using MangaForum</h2>
+      <p>
+        MangaForum provides manga metadata, release information and, as features
+        become available, community discussion and reading tracking. Release
+        records may be incomplete or inaccurate. Confirm availability with the
+        official publisher.
+      </p>
+      <h2>Respect the work and the readers</h2>
+      <p>
+        Do not upload copyrighted scans, link to unauthorized copies, harass
+        other readers, or misuse the service. Mark spoilers accurately when
+        discussion becomes available. We may remove content or restrict access
+        for abuse.
+      </p>
+      <h2>Your contributions</h2>
+      <p>
+        You retain ownership of your original contributions. Posting grants
+        MangaForum permission to display and moderate them as part of the
+        service. Only submit material you have the right to share.
+      </p>
+      <h2>Availability and changes</h2>
+      <p>
+        This is an early development service offered as available. Features and
+        these terms may change. Material changes will be announced on the site.
+        External publisher sites have their own terms.
+      </p>
+    </article>
+  );
+}
