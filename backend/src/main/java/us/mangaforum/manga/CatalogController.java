@@ -31,10 +31,6 @@ public class CatalogController {
     @GetMapping("/manga/{slug}") public Manga detail(@PathVariable String slug) {
         return manga.findBySlug(slug).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manga not found"));
     }
-    @GetMapping("/manga/{slug}/chapters")
-    public Results<Chapter> chapters(@PathVariable String slug, @RequestParam(defaultValue = "0") @Min(0) @Max(10000) int page) {
-        return Results.from(chapters.findByMangaIdAndReleasedAtLessThanEqualOrderByNumberDesc(detail(slug).id, Instant.now(), PageRequest.of(page, 30)));
-    }
     @GetMapping("/chapters/recent") public List<Release> recent() {
         var releases = chapters.findByReleasedAtLessThanEqualOrderByReleasedAtDescIdDesc(Instant.now(), PageRequest.of(0, 8)).getContent();
         var titles = new HashMap<Long, Manga>();

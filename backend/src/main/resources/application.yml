@@ -13,6 +13,7 @@ server:
   address: ${SERVER_ADDRESS:127.0.0.1}
   servlet:
     session:
+      timeout: 7d
       cookie:
         http-only: true
         secure: ${COOKIE_SECURE:false}

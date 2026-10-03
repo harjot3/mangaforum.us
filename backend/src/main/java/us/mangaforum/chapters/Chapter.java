@@ -8,7 +8,11 @@ public class Chapter {
     @Column(nullable = false) public Long mangaId;
     @Column(nullable = false, precision = 8, scale = 2) public BigDecimal number;
     @Column(length = 200) public String title;
-    @Column(nullable = false) public Instant releasedAt;
+    public Instant releasedAt;
     @Column(length = 500) public String officialUrl;
+    @Column(columnDefinition = "text") public String description;
+    @Column(nullable = false, length = 20) public String officialLinkKind = "SERIES";
+    @Column(length = 40) public String source;
+    @Column(nullable = false) public Instant indexedAt;
     protected Chapter() {}
 }
