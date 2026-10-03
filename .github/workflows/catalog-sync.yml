@@ -1,0 +1,30 @@
+name: Refresh ongoing manga
+on:
+  schedule:
+    - cron: '17 7 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: catalog-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm run test:catalog
+      - run: npm run catalog:sync
+      - name: Commit complete catalog snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add frontend/data/catalog.json frontend/data/catalog-sync.json backend/src/main/resources/db/migration/R__synced_catalog.sql
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh ongoing manga catalog'
+            git push
+          fi

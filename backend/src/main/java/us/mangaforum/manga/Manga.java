@@ -12,5 +12,9 @@ public class Manga {
     @Column(nullable = false, length = 20) public String status;
     @Column(nullable = false, length = 300) public String genres;
     @Column(length = 500) public String officialUrl;
+    @Column(unique = true) public Integer sourceId;
+    @Column(length = 500) public String sourceUrl;
+    @Column(length = 500) public String coverUrl;
+    @Column(nullable = false) public int popularity;
     protected Manga() {}
 }

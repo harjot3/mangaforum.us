@@ -4,7 +4,7 @@ export function Cover({
   manga,
   small = false,
 }: {
-  manga: Pick<Manga, "title" | "id" | "slug">;
+  manga: Pick<Manga, "title" | "id" | "slug" | "coverUrl">;
   small?: boolean;
 }) {
   const covers: Record<string, string> = {
@@ -17,11 +17,19 @@ export function Cover({
     "blue-period": "webp",
     "witch-hat-atelier": "webp",
   };
-  if (covers[manga.slug]) {
+  const remoteCover = manga.coverUrl?.startsWith(
+    "https://s4.anilist.co/file/anilistcdn/media/manga/",
+  )
+    ? manga.coverUrl
+    : undefined;
+  const src = covers[manga.slug]
+    ? `/covers/${manga.slug}.${covers[manga.slug]}`
+    : remoteCover;
+  if (src) {
     return (
       <div className="manga-cover">
         <Image
-          src={`/covers/${manga.slug}.${covers[manga.slug]}`}
+          src={src}
           alt={`${manga.title} cover`}
           unoptimized
           width={200}

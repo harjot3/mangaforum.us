@@ -16,12 +16,12 @@ Run the whole application from the repository root:
 
 ```sh
 npm --prefix frontend ci
-npm run dev
+npm run dev:full
 ```
 
 Requires Node 22+, Java 21+, Maven 3.9+, and PostgreSQL command-line tools. On Apple Silicon Macs the launcher detects Homebrew’s JDK. It starts or reuses a local PostgreSQL instance on port 55432, applies database migrations through Spring Boot, waits for the API, then starts Next.js at http://localhost:3000. Backend logs are in `.local/backend.log`. A newly initialized database persists in `.local/postgres`; stopping the application leaves PostgreSQL running. Set `DATABASE_URL`, `DATABASE_USER`, and `DATABASE_PASSWORD` to use another database.
 
-Starting only `frontend/npm run dev` does not start the API. Use the root command to avoid the catalog connection error.
+`npm run dev` starts the frontend with the bundled catalog. `npm run dev:full` starts PostgreSQL and Spring Boot as well.
 
 Alternatively, with Docker installed:
 
@@ -31,7 +31,9 @@ docker compose up --build
 
 Compose serves the frontend at http://localhost:3000, the API at http://localhost:8080/api/manga, and Swagger at http://localhost:8080/swagger-ui/index.html. Its PostgreSQL volume persists across restarts.
 
-The default database contains eight real manga series with author details, original short synopses, genres, and official publisher links. Cover thumbnails and metadata sources are recorded in [catalog sources](docs/catalog-sources.md). This is a curated catalog, not a live release feed. V3 removes the exact synthetic chapter records from the historical V2 demo migration; it does not fabricate replacement chapter dates. V2’s SQL is unchanged and now lives in the common migration directory so existing databases retain a valid migration history.
+The catalog includes a complete imported snapshot of ongoing Japanese manga indexed by AniList (excluding adult entries), with popularity ordering, source links, covers, search and pagination. The homepage features 24 popular ongoing titles. Completed and hiatus titles remain discoverable. Both the bundled frontend catalog and PostgreSQL use the same generated snapshot.
+
+Refresh with `npm run catalog:sync`. A daily GitHub Actions workflow is included; deploy refreshed snapshots to update running services. See [catalog sources](docs/catalog-sources.md) for scope, scheduling and provider limitations. No verified chapter release feed is connected yet; chapter dates and discussion activity are not fabricated.
 
 ## Configuration
 
@@ -51,6 +53,8 @@ Next.js rewrites are configured at build time. Rebuild the frontend when changin
 cd backend
 mvn verify
 ```
+
+`npm run test:catalog` verifies import pagination, failure handling and identity preservation.
 
 JUnit integration tests use Testcontainers and PostgreSQL 17, requiring a running Docker daemon. They exercise migrations, catalog filters, chapter ordering and invalid requests. They fail rather than silently skip when Docker is unavailable.
 

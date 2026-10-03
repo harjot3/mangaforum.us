@@ -1,9 +1,11 @@
 import "server-only";
-import catalog from "@/data/catalog.json";
+import catalogData from "@/data/catalog.json";
 import { ApiError, type Manga, type Results } from "./api";
 
+const catalog: Manga[] = catalogData;
+
 type CatalogSource = "backend" | "bundled" | "fallback";
-const pageSize = 12;
+const pageSize = 24;
 
 function parsePath(path: string) {
   // Only public catalog endpoints can reach the upstream service.
@@ -19,7 +21,7 @@ function parsePath(path: string) {
   const detail = /^\/manga\/([a-z0-9-]+)(\/chapters)?$/.exec(url.pathname);
   const allowed =
     url.pathname === "/manga"
-      ? ["q", "status", "genre", "page"]
+      ? ["q", "status", "genre", "page", "sort"]
       : detail?.[2]
         ? ["page"]
         : [];
@@ -31,7 +33,9 @@ function parsePath(path: string) {
   const genre = url.searchParams.get("genre") ?? "";
   const status = url.searchParams.get("status") ?? "";
   const page = url.searchParams.get("page") ?? "0";
+  const sort = url.searchParams.get("sort") ?? "popular";
   if (
+    !["popular", "title"].includes(sort) ||
     q.length > 100 ||
     genre.length > 40 ||
     !["", "ONGOING", "COMPLETED", "HIATUS"].includes(status) ||
@@ -46,12 +50,13 @@ function parsePath(path: string) {
     q: q.trim().toLowerCase(),
     genre: genre.trim().toLowerCase(),
     status,
+    sort,
     page: Number(page),
   };
 }
 
 function bundled(path: ReturnType<typeof parsePath>) {
-  const { url, detail, q, genre, status, page } = path;
+  const { url, detail, q, genre, status, page, sort } = path;
   if (url.pathname === "/chapters/recent") return [];
   if (detail) {
     const manga = catalog.find((m) => m.slug === detail[1]);
@@ -69,7 +74,12 @@ function bundled(path: ReturnType<typeof parsePath>) {
         (!status || m.status === status) &&
         (!genre || m.genres.toLowerCase().includes(genre)),
     )
-    .sort((a, b) => a.title.localeCompare(b.title));
+    .sort(
+      (a, b) =>
+        (sort === "popular"
+          ? (b.popularity ?? 0) - (a.popularity ?? 0)
+          : a.title.localeCompare(b.title)) || a.slug.localeCompare(b.slug),
+    );
   return {
     items: matches.slice(page * pageSize, (page + 1) * pageSize),
     page,

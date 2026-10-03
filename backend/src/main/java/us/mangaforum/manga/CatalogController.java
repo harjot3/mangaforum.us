@@ -23,8 +23,10 @@ public class CatalogController {
     public Results<Manga> browse(@RequestParam(defaultValue = "") @Size(max = 100) String q,
         @RequestParam(defaultValue = "") @Pattern(regexp = "|ONGOING|COMPLETED|HIATUS") String status,
         @RequestParam(defaultValue = "") @Size(max = 40) String genre,
-        @RequestParam(defaultValue = "0") @Min(0) @Max(10000) int page) {
-        return Results.from(manga.browse(q.strip(), status, genre.strip(), PageRequest.of(page, 12, Sort.by("title"))));
+        @RequestParam(defaultValue = "0") @Min(0) @Max(10000) int page,
+        @RequestParam(defaultValue = "popular") @Pattern(regexp = "popular|title") String sort) {
+        Sort order = sort.equals("popular") ? Sort.by(Sort.Order.desc("popularity"), Sort.Order.asc("slug")) : Sort.by("title", "slug");
+        return Results.from(manga.browse(q.strip(), status, genre.strip(), PageRequest.of(page, 24, order)));
     }
     @GetMapping("/manga/{slug}") public Manga detail(@PathVariable String slug) {
         return manga.findBySlug(slug).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Manga not found"));

@@ -8,6 +8,10 @@ export type Manga = {
   status: string;
   genres: string;
   officialUrl: string | null;
+  sourceId?: number;
+  sourceUrl?: string | null;
+  coverUrl?: string | null;
+  popularity?: number;
 };
 export type Chapter = {
   id: number;
@@ -48,3 +52,24 @@ export function date(value: string) {
     timeZone: "UTC",
   }).format(new Date(value));
 }
+
+export const genres = [
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Drama",
+  "Ecchi",
+  "Fantasy",
+  "Horror",
+  "Mahou Shoujo",
+  "Mecha",
+  "Music",
+  "Mystery",
+  "Psychological",
+  "Romance",
+  "Sci-Fi",
+  "Slice of Life",
+  "Sports",
+  "Supernatural",
+  "Thriller",
+];

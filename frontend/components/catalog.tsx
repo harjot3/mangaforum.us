@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { api, Manga, Results } from "@/lib/api";
+import { api, genres, Manga, Results } from "@/lib/api";
 import { Cover } from "./cover";
 export function Catalog() {
   const params = useSearchParams();
@@ -10,10 +10,17 @@ export function Catalog() {
   const q = params.get("q") ?? "";
   const status = params.get("status") ?? "";
   const genre = params.get("genre") ?? "";
+  const sort = params.get("sort") ?? "popular";
   const page = Math.max(0, Number(params.get("page")) || 0);
-  const query = new URLSearchParams({ q, status, genre, page: String(page) });
+  const query = new URLSearchParams({
+    q,
+    status,
+    genre,
+    sort,
+    page: String(page),
+  });
   const { data, isPending, isError, refetch } = useQuery({
-    queryKey: ["manga", q, status, genre, page],
+    queryKey: ["manga", q, status, genre, sort, page],
     queryFn: () => api<Results<Manga>>(`/manga?${query}`),
   });
   function changePage(value: number) {
@@ -35,7 +42,7 @@ export function Catalog() {
         </label>
         <label>
           Status
-          <select name="status" defaultValue={status}>
+          <select name="status" defaultValue={status} key={status}>
             <option value="">All series</option>
             <option value="ONGOING">Ongoing</option>
             <option value="COMPLETED">Completed</option>
@@ -44,17 +51,18 @@ export function Catalog() {
         </label>
         <label>
           Genre
-          <select name="genre" defaultValue={genre}>
+          <select name="genre" defaultValue={genre} key={genre}>
             <option value="">All genres</option>
-            <option>Action</option>
-            <option>Adventure</option>
-            <option>Comedy</option>
-            <option>Drama</option>
-            <option>Fantasy</option>
-            <option>Horror</option>
-            <option>Mystery</option>
-            <option>Slice of Life</option>
-            <option>Supernatural</option>
+            {genres.map((value) => (
+              <option key={value}>{value}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Sort by
+          <select name="sort" defaultValue={sort} key={sort}>
+            <option value="popular">Most popular</option>
+            <option value="title">Title A–Z</option>
           </select>
         </label>
         <button type="submit">Browse</button>

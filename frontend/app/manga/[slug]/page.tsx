@@ -36,6 +36,17 @@ export default async function MangaPage({
           <p className="alternate">{manga.alternateTitle}</p>
           <p className="byline">By {manga.author}</p>
           <p className="synopsis">{manga.description}</p>
+          {manga.sourceId && (
+            <p className="metadata">
+              <a
+                href={`https://anilist.co/manga/${manga.sourceId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Series metadata on AniList ↗
+              </a>
+            </p>
+          )}
           {publisherUrl(manga.officialUrl) && (
             <a
               className="button"

@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "npm --prefix frontend run dev -- --webpack",
-    "dev:full": "bash scripts/dev.sh"
+    "dev:full": "bash scripts/dev.sh",
+    "catalog:sync": "node scripts/sync-catalog.mjs",
+    "test:catalog": "node --test scripts/sync-catalog.test.mjs"
   }
 }

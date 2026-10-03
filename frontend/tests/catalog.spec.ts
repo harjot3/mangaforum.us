@@ -4,21 +4,21 @@ test("browse publisher-sourced manga and chapter availability", async ({
 }, testInfo) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "Manga database" }),
+    page.getByRole("heading", { name: "Ongoing manga", exact: true }),
   ).toBeVisible();
-  await expect(page.locator(".home-catalog .catalog-item")).toHaveCount(8);
-  await page.getByAltText("Chainsaw Man cover").scrollIntoViewIfNeeded();
-  await expect(page.getByAltText("Chainsaw Man cover")).toBeVisible();
+  await expect(page.locator(".home-catalog .catalog-item")).toHaveCount(24);
+  await page.getByAltText("One Piece cover").scrollIntoViewIfNeeded();
+  await expect(page.getByAltText("One Piece cover")).toBeVisible();
   await expect
     .poll(
       async () =>
         await page
-          .getByAltText("Chainsaw Man cover")
+          .getByAltText("One Piece cover")
           .evaluate((image) => (image as HTMLImageElement).naturalWidth),
     )
     .toBeGreaterThan(0);
   await page.screenshot({
-    path: `../docs/screenshots/home-${testInfo.project.name}.png`,
+    path: testInfo.outputPath("home.png"),
     fullPage: true,
   });
   await page.getByRole("link", { name: "Manga database", exact: true }).click();
@@ -50,7 +50,12 @@ test("empty searches and missing titles are recoverable", async ({ page }) => {
   ).toBeVisible();
   await page.goto("/manga/no-such-title");
   await expect(
-    page.getByRole("heading", { name: process.env.EXPECT_CATALOG_SOURCE === "fallback" ? "Catalog unavailable" : "Page not found" }),
+    page.getByRole("heading", {
+      name:
+        process.env.EXPECT_CATALOG_SOURCE === "fallback"
+          ? "Catalog unavailable"
+          : "Page not found",
+    }),
   ).toBeVisible();
 });
 
@@ -61,7 +66,13 @@ test("homepage icons and security policy work without injected scripts", async (
   await page.route("**/", async (route) => {
     const response = await route.fetch();
     const html = await response.text();
-    await route.fulfill({ response, body: html.replace("</head>", "<script>window.__injected = true</script></head>") });
+    await route.fulfill({
+      response,
+      body: html.replace(
+        "</head>",
+        "<script>window.__injected = true</script></head>",
+      ),
+    });
   });
   const response = await page.goto("/");
   const csp = response!.headers()["content-security-policy"];
@@ -97,10 +108,11 @@ test("homepage icons and security policy work without injected scripts", async (
     expect(catalog.headers()["x-catalog-source"]).toBe(
       process.env.EXPECT_CATALOG_SOURCE,
     );
-  expect((await catalog.json()).totalItems).toBe(8);
+  expect((await catalog.json()).totalItems).toBeGreaterThan(100);
   for (const path of [
     "/api/manga?page=-1",
     "/api/manga?status=bad",
+    "/api/manga?sort=invalid",
     "/api/manga?q=" + "a".repeat(101),
     "/api/manga?q=a&q=b",
   ]) {
@@ -116,4 +128,68 @@ test("homepage icons and security policy work without injected scripts", async (
     params: { q: "' OR 1=1 --" },
   });
   expect((await injection.json()).totalItems).toBe(0);
+});
+
+test("ongoing popularity ranking, pagination and expanded-title discovery", async ({
+  page,
+  request,
+}) => {
+  const first = await (
+    await request.get("/api/manga?status=ONGOING&sort=popular")
+  ).json();
+  const second = await (
+    await request.get("/api/manga?status=ONGOING&sort=popular&page=1")
+  ).json();
+  expect(first.totalItems).toBeGreaterThan(100);
+  expect(first.items).toHaveLength(24);
+  expect(second.items).toHaveLength(24);
+  expect(
+    first.items.every((m: { status: string }) => m.status === "ONGOING"),
+  ).toBe(true);
+  const combined = [...first.items, ...second.items];
+  expect(new Set(combined.map((m) => m.slug)).size).toBe(48);
+  expect(combined.map((m) => m.popularity)).toEqual(
+    combined.map((m) => m.popularity).sort((a, b) => b - a),
+  );
+  await page.goto("/");
+  await expect(
+    page.locator(".home-catalog .catalog-item").first().getByRole("heading"),
+  ).toHaveText(first.items[0].title);
+  await page
+    .getByRole("link", { name: "Browse all ongoing →", exact: true })
+    .click();
+  await expect(
+    page.getByRole("combobox", { name: "Status", exact: true }),
+  ).toHaveValue("ONGOING");
+  await expect(page.getByLabel("Sort by")).toHaveValue("popular");
+  await expect(page.locator(".catalog-list .catalog-item")).toHaveCount(24);
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page).toHaveURL(/page=1/);
+  await expect(
+    page.locator(".catalog-list .catalog-item").first().getByRole("heading"),
+  ).toHaveText(second.items[0].title);
+  await page.getByLabel("Find a title").fill("Kagurabachi");
+  await page.getByRole("button", { name: "Browse", exact: true }).click();
+  await page
+    .getByRole("heading", { name: "Kagurabachi", exact: true })
+    .getByRole("link")
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Kagurabachi", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Series metadata on AniList ↗" }),
+  ).toBeVisible();
+  await expect
+    .poll(() =>
+      page
+        .getByAltText("Kagurabachi cover")
+        .evaluate((image) => (image as HTMLImageElement).naturalWidth),
+    )
+    .toBeGreaterThan(0);
+  await expect
+    .poll(() =>
+      page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+    )
+    .toBeTruthy();
 });

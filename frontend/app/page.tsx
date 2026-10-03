@@ -1,26 +1,39 @@
 import { CharacterIcon } from "@/components/character-icon";
 import { api } from "@/lib/catalog-server";
 import Link from "next/link";
-import { Manga, Results } from "@/lib/api";
+import { genres, Manga, Results } from "@/lib/api";
 import { Cover } from "@/components/cover";
 export const dynamic = "force-dynamic";
 export default async function Home() {
-  const catalog = await api<Results<Manga>>("/manga");
+  const catalog = await api<Results<Manga>>(
+    "/manga?status=ONGOING&sort=popular",
+  );
   return (
     <>
       <div className="page-heading">
-        <h1>Manga database</h1>
+        <h1>Ongoing manga</h1>
         <div className="heading-tools">
-          <span className="metadata">{catalog.totalItems} series</span>
+          <span className="metadata">
+            {catalog.totalItems.toLocaleString("en-US")} ongoing series
+          </span>
           <CharacterIcon character="yatora" />
         </div>
       </div>
+      <p className="home-intro">
+        Find your next chapter conversation. Explore ongoing series, starting
+        with the most popular among readers.
+      </p>
       <div className="home-columns">
         <section>
           <div className="section-heading">
-            <h2>Browse manga</h2>
-            <Link href="/discover">View all →</Link>
+            <h2>Popular ongoing manga</h2>
+            <Link href="/discover?status=ONGOING&sort=popular">
+              Browse all ongoing →
+            </Link>
           </div>
+          <p className="metadata ranking-note">
+            Ranked by AniList reader lists.
+          </p>
           <div className="home-catalog">
             {catalog.items.map((manga) => (
               <article className="catalog-item" key={manga.id}>
@@ -38,10 +51,25 @@ export default async function Home() {
                   <p className="byline">{manga.author}</p>
                   <p className="description">{manga.description}</p>
                   <span className="metadata">{manga.genres}</span>
+                  <Link
+                    className="text-link"
+                    href={`/manga/${manga.slug}/chapters`}
+                  >
+                    View chapters →
+                  </Link>
                 </div>
               </article>
             ))}
           </div>
+          <p className="browse-more">
+            <Link
+              className="button"
+              href="/discover?status=ONGOING&sort=popular"
+            >
+              Browse all {catalog.totalItems.toLocaleString("en-US")} ongoing
+              series →
+            </Link>
+          </p>
           {!catalog.items.length && <p className="empty">No manga found.</p>}
         </section>
         <aside className="catalog-sidebar">
@@ -51,17 +79,7 @@ export default async function Home() {
               <CharacterIcon character="coco" />
             </div>
             <nav className="genre-links" aria-label="Browse genres">
-              {[
-                "Action",
-                "Adventure",
-                "Comedy",
-                "Drama",
-                "Fantasy",
-                "Horror",
-                "Mystery",
-                "Slice of Life",
-                "Supernatural",
-              ].map((genre) => (
+              {genres.map((genre) => (
                 <Link
                   key={genre}
                   href={`/discover?genre=${encodeURIComponent(genre)}`}

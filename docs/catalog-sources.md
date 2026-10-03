@@ -1,6 +1,20 @@
 # Catalog sources
 
-Reviewed September 26, 2026. The catalog is a manually maintained set of real series, not a live synchronization with publishers. Synopses are short original summaries. Publisher links are available on each series page. Publication statuses should be rechecked when updating the catalog.
+The main catalog is synchronized from [AniList](https://anilist.co/) using its [GraphQL API](https://docs.anilist.co/). `npm run catalog:sync` fetches every page of non-adult Japanese manga marked `RELEASING`, with no popularity cutoff. Coverage depends on AniList’s indexing and status accuracy; this does not claim to include every manga published worldwide. Previously imported titles remain available when completed or on hiatus.
+
+Popularity is AniList’s reader-list count, not a MangaForum discussion count or a claim about recent chapter activity. The homepage shows the top 24 ongoing series; discovery paginates the whole catalog and supports popularity or alphabetical sorting. Source IDs and metadata links are stored for each title. `frontend/data/catalog-sync.json` records snapshot time and coverage.
+
+## Refreshing
+
+Run `npm run catalog:sync` from the repository root. Node 22 and outbound HTTPS access to `graphql.anilist.co` are required; no API key is needed. Requests are spaced below the provider’s degraded 30/minute limit, retry transient failures, and honor `Retry-After`. Stable ID ordering and exclusion batches traverse beyond the 5,000-entry offset limit. Provider limits or incomplete responses fail the refresh rather than publish a truncated catalog.
+
+The importer fetches and validates the full run before replacing the frontend JSON and the backend repeatable Flyway migration. Existing titles missing from the ongoing feed are re-fetched to update finished/hiatus status. Existing slugs, IDs, publisher links, curated synopses, follows, and chapter relationships are preserved. The backend upserts by slug without deleting series. The frontend and backend IDs need not match; links use stable slugs.
+
+`.github/workflows/catalog-sync.yml` schedules a daily refresh and supports manual dispatch. Once pushed to the default branch, it commits complete snapshots using the workflow token (requires repository Actions write permissions and a branch policy allowing the bot). Rebuild/redeploy the frontend and restart the updated backend to serve a new snapshot; this workflow does not deploy services. For local development, Next.js reloads the changed JSON; restart Spring Boot to run the updated repeatable migration. A provider outage leaves the previous snapshot in place, including when the site runs without a backend.
+
+New series use factual descriptions assembled from title/genre metadata rather than copied synopses. Cover thumbnails are served from AniList’s image CDN; images belong to their respective rights holders. The eight original titles retain their locally served publisher covers and original short summaries.
+
+## Original curated entries
 
 | Series | Publisher source | Local cover |
 | --- | --- | --- |

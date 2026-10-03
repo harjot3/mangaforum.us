@@ -8,7 +8,7 @@ export function proxy(request: NextRequest) {
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${development ? " 'unsafe-eval'" : ""}`,
     // Next Image and the development overlay use inline style attributes.
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    "img-src 'self' data: blob: https://s4.anilist.co",
     "font-src 'self'",
     `connect-src 'self'${development ? " ws://localhost:* ws://127.0.0.1:*" : ""}`,
     "object-src 'none'",

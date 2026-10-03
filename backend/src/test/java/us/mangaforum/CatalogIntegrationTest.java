@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,11 +40,23 @@ class CatalogIntegrationTest {
     }
     @Test void seedsPublishedCatalogWithoutFakeReleases() throws Exception {
         mvc.perform(get("/api/manga")).andExpect(status().isOk())
-            .andExpect(jsonPath("$.totalItems").value(8));
+            .andExpect(jsonPath("$.totalItems").value(greaterThan(100)))
+            .andExpect(jsonPath("$.items.length()").value(24));
         mvc.perform(get("/api/chapters/recent")).andExpect(status().isOk())
             .andExpect(jsonPath("$.length()").value(0));
     }
+    @Test void ranksOngoingMangaAndSupportsDeepPagination() throws Exception {
+        mvc.perform(get("/api/manga").param("status", "ONGOING").param("sort", "popular"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.items.length()").value(24))
+            .andExpect(jsonPath("$.items[*].status").value(everyItem(is("ONGOING"))))
+            .andExpect(jsonPath("$.items[0].popularity").value(greaterThan(0)));
+        mvc.perform(get("/api/manga").param("status", "ONGOING").param("page", "1"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.items.length()").value(24));
+        mvc.perform(get("/api/manga").param("q", "Kagurabachi"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.items[0].title").value("Kagurabachi"));
+    }
     @Test void rejectsInvalidPagesAndMissingTitles() throws Exception {
+        mvc.perform(get("/api/manga").param("sort", "invalid")).andExpect(status().isBadRequest());
         mvc.perform(get("/api/manga").param("page", "-1")).andExpect(status().isBadRequest());
         mvc.perform(get("/api/manga/missing")).andExpect(status().isNotFound());
     }

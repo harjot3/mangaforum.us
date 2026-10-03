@@ -793,3 +793,28 @@ button:hover,
 .catalog-sidebar .section-heading {
   align-items: center;
 }
+
+.home-intro {
+  margin: 0 0 24px;
+  color: var(--muted);
+}
+.ranking-note {
+  padding: 8px 12px;
+  margin: 0;
+  border-inline: 1px solid var(--rule);
+}
+.browse-more {
+  margin-top: 20px;
+}
+.filters {
+  flex-wrap: wrap;
+}
+
+.home-catalog .text-link {
+  display: block;
+  margin-top: 8px;
+}
+.catalog-item h2,
+.alternate {
+  overflow-wrap: anywhere;
+}
